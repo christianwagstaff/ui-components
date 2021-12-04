@@ -1,90 +1,90 @@
-// function createNestedList(list, how) {
-//   let lstType;
-//   let itemType;
-//   switch (how) {
-//     case "ordered":
-//       lstType = "ol";
-//       itemType = "li";
-//       break;
-//     case "unordered":
-//       lstType = "ul";
-//       itemType = "li";
-//       break;
-//     default:
-//       lstType = "ul";
-//       itemType = "li";
-//   }
-//   let menu = document.createElement(lstType);
-//   for (let item of list) {
-//     if (typeof item === "string") {
-//       let lstItem = document.createElement(itemType);
-//       lstItem.textContent = item;
-//       menu.appendChild(lstItem);
-//     } else if (typeof item === "object") {
-//       menu.appendChild(createNestedList(item, how));
-//     }
-//   }
-//   return menu;
-// }
-
-// function createNested(template) {
-//   let nav = document.createElement("nav");
-//   nav.classList.add("navBar");
-//   nav.appendChild(createNestedList(template));
-//   return nav;
-// }
-
-// let sampleTemplate = [
-//   "Nav 1",
-//   ["Drop 1", "Drop 2"],
-//   "Nav 2",
-//   "Nav 3",
-//   ["Drop 1", "Drop 2", ["Inner 1", "Inner 2"], "Drop 3"],
-// ];
-
-let otherSample = [
-  ["Nav 1", ["Drop 1", "Drop 2"], "menu-1"],
-  ["Nav 2"],
-  ["Nav 3", ["Drop 1", "Drop 2", "Drop 3"], "menu-3"],
-  ["Nav 4", ["Drop 4-1", ["Drop 4-2", ["Drop 4-1", "Drop 4-2"]]], "menu-4"],
-];
-
-// (function createNav(template) {
-//   let nav = document.createElement("nav");
-//   nav.appendChild(createNestedList(template));
-//   document.body.appendChild(nav);
-// })(otherSample);
-
-function createNestedList(list, classItem) {
-  let ul = document.createElement("ul");
-  if (classItem) {
-    for (let item of classItem) {
-      ul.classList.add(item);
-    }
+class NavBar {
+  constructor() {
+    this.navList = [];
   }
-  for (let item of list) {
-    let classes = ["drop-menu"];
-    let li = document.createElement("li");
-    if (typeof item === "string") {
-      li.textContent = item;
-    } else {
-      li.textContent = item[0];
-      if (item[2]) {
-        classes.push(item[2]);
+
+  createOLForNav() {
+    let list = this.navList;
+    let ul = document.createElement("ul");
+    for (let key of list) {
+      let li = document.createElement("li");
+      if (key["link"]) {
+        let a = document.createElement("a");
+        a.href = key["link"];
+        a.textContent = key.title;
+        if (key["target"]) {
+          a.target = key["target"];
+        }
+        li.appendChild(a);
+      } else {
+        li.textContent = key.title;
       }
-      if (item.length > 1) {
-        let innerMenu = item[1];
-        li.appendChild(createNestedList(innerMenu, classes));
+      if (key["submenu"]) {
+        let innerList = this.createNestedListFromObject(key["submenu"]);
+        innerList.classList.add("drop-menu");
+        if (key["class"]) {
+          let classes = key["class"];
+          for (let userClass of classes) {
+            innerList.classList.add(userClass);
+          }
+        }
+        li.appendChild(innerList);
       }
+
+      ul.appendChild(li);
     }
-    ul.appendChild(li);
+    return ul;
   }
-  return ul;
+
+  createNestedListFromObject(list) {
+    let ul = document.createElement("ul");
+    for (let key of list) {
+      let li = document.createElement("li");
+      if (key["link"]) {
+        let a = document.createElement("a");
+        a.href = key["link"];
+        a.textContent = key.title;
+        if (key["target"]) {
+          a.target = key["target"];
+        }
+        li.appendChild(a);
+      } else {
+        li.textContent = key.title;
+      }
+      if (key["submenu"]) {
+        let innerList = this.createNestedListFromObject(key["submenu"]);
+        innerList.classList.add("drop-menu");
+        if (key["class"]) {
+          let classes = key["class"];
+          for (let userClass of classes) {
+            innerList.classList.add(userClass);
+          }
+        }
+        li.appendChild(innerList);
+      }
+
+      ul.appendChild(li);
+    }
+    return ul;
+  }
+
+  renderNav() {
+    let nav = document.createElement("nav");
+    nav.appendChild(this.createOLForNav());
+    return nav;
+  }
+
+  createNavItem(title, link) {
+    let obj = { title, link };
+    this.navList.push(obj);
+  }
+
+  useTemplate(template) {
+    this.navList = template;
+  }
 }
 
 function dropDownFunction(e) {
-  if (eventDelegationByInner(e, "li", ".drop-menu")) {
-  }
   let parent = e.target.closest("li");
   let dropDownContent = parent.querySelector(".drop-menu");
   let currentActive = findCurrentActive();
@@ -154,85 +154,8 @@ let navTemplate = [
   { title: "Kaden", link: "#", submenu: [{ title: "Test" }] },
 ];
 
-(function createNav(template) {
-  let nav = document.createElement("nav");
-  nav.appendChild(createNestedListFromObject(template));
-  document.body.appendChild(nav);
-})(navTemplate);
-
-function createNestedListFromObject(list) {
-  let ul = document.createElement("ul");
-  for (let key of list) {
-    let li = document.createElement("li");
-    if (key["link"]) {
-      let a = document.createElement("a");
-      a.href = key["link"];
-      a.textContent = key.title;
-      if (key["target"]) {
-        a.target = key["target"];
-      }
-      li.appendChild(a);
-    } else {
-      li.textContent = key.title;
-    }
-    if (key["submenu"]) {
-      let innerList = createNestedListFromObject(key["submenu"]);
-      innerList.classList.add("drop-menu");
-      if (key["class"]) {
-        let classes = key["class"];
-        for (let userClass of classes) {
-          innerList.classList.add(userClass);
-        }
-      }
-      li.appendChild(innerList);
-    }
-
-    ul.appendChild(li);
-  }
-  return ul;
-}
-
-let nav = document.querySelector("nav");
+const navItem = new NavBar;
+navItem.useTemplate(navTemplate);
+document.body.appendChild(navItem.renderNav())
+const nav = document.querySelector("nav");
 nav.addEventListener("click", dropDownFunction);
-
-class NavBar {
-  constructor() {
-    this.navList = [];
-  }
-
-  createOLForNav(list) {
-    let ul = document.createElement("ul");
-    for (let key of list) {
-      let li = document.createElement("li");
-      if (key["link"]) {
-        let a = document.createElement("a");
-        a.href = key["link"];
-        a.textContent = key.title;
-        if (key["target"]) {
-          a.target = key["target"];
-        }
-        li.appendChild(a);
-      } else {
-        li.textContent = key.title;
-      }
-      if (key["submenu"]) {
-        let innerList = createNestedListFromObject(key["submenu"]);
-        innerList.classList.add("drop-menu");
-        if (key["class"]) {
-          let classes = key["class"];
-          for (let userClass of classes) {
-            innerList.classList.add(userClass);
-          }
-        }
-        li.appendChild(innerList);
-      }
-
-      ul.appendChild(li);
-    }
-    return ul;
-  }
-
-  createNavItem(title) {
-    return { title };
-  }
-}
