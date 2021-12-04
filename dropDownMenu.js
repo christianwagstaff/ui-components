@@ -87,19 +87,24 @@ function dropDownFunction(e) {
   }
   let parent = e.target.closest("li");
   let dropDownContent = parent.querySelector(".drop-menu");
-  removeActiveFromNav();
-  try {
+  let currentActive = findCurrentActive();
+  if (currentActive && currentActive !== dropDownContent) {
+    removeActive(currentActive);
+  }
+  if (dropDownContent) {
     dropDownContent.classList.toggle("active");
-  } catch (error) {
-    // console.log(error);
   }
 }
 
-function removeActiveFromNav() {
+function findCurrentActive() {
   let active = document.querySelector(".active");
   if (active) {
-    active.classList.remove("active");
+    return active;
   }
+}
+
+function removeActive(active) {
+  active.classList.remove("active");
 }
 
 function eventDelegationByInner(event, nodeType, innerClassName) {
@@ -111,39 +116,43 @@ function eventDelegationByInner(event, nodeType, innerClassName) {
   }
 }
 
-let navTemplate = {
-  Haily: {
+let navTemplate = [
+  {
+    title: "Haily",
     link: "#",
-    child: {
-      "Nav 1": { link: "#" },
-      "Nav 2": { link: "#" },
-      "Nav 3": {
+    submenu: [
+      { title: "Nav 1", link: "#" },
+      { title: "Nav 2", link: "#" },
+      {
+        title: "Nav 3",
         link: "#",
-        child: {
-          "Nav 1": { link: "#" },
-          "Nav 2": { link: "#" },
-          "Nav 3": { link: "#" },
-          "Nav 4": { link: "#" },
-        },
+        submenu: [
+          { title: "Sub 1", link: "#" },
+          { title: "Sub 2", link: "#" },
+          { title: "Sub 3", link: "#" },
+          { title: "Sub 4", link: "#" },
+        ],
         class: ["sub-menu"],
       },
-      "Nav 4": { link: "#" },
-    },
+      { title: "Nav 4", link: "#" },
+    ],
   },
-  "Nav 2": {
-    child: {
-      "Nav 1": { link: "#" },
-      "Nav 2": { link: "#" },
-      "Nav 3": { link: "#" },
-      "Nav 4": { link: "#" },
-    },
+  {
+    title: "Christian",
+    submenu: [
+      { title: "Sub 1", link: "#" },
+      { title: "Sub 2", link: "#" },
+      { title: "Sub 3", link: "#" },
+      { title: "Sub 4", link: "#" },
+    ],
   },
-  Sophie: {
+  {
+    title: "Sophie",
     link: "https://www.google.com",
     target: "_blank",
   },
-  Kaden: { link: "#" },
-};
+  { title: "Kaden", link: "#", submenu: [{ title: "Test" }] },
+];
 
 (function createNav(template) {
   let nav = document.createElement("nav");
@@ -153,29 +162,25 @@ let navTemplate = {
 
 function createNestedListFromObject(list) {
   let ul = document.createElement("ul");
-  let keys = Object.keys(list);
-  for (let key of keys) {
+  for (let key of list) {
     let li = document.createElement("li");
-    if (list[key]["link"]) {
+    if (key["link"]) {
       let a = document.createElement("a");
-      a.href = list[key]["link"];
-      a.textContent = key;
-      if (list[key]["target"]) {
-        a.target = list[key]["target"];
+      a.href = key["link"];
+      a.textContent = key.title;
+      if (key["target"]) {
+        a.target = key["target"];
       }
       li.appendChild(a);
     } else {
-      li.textContent = key;
+      li.textContent = key.title;
     }
-    if (list[key]["child"]) {
-      let innerList = createNestedListFromObject(list[key]["child"]);
+    if (key["submenu"]) {
+      let innerList = createNestedListFromObject(key["submenu"]);
       innerList.classList.add("drop-menu");
-      if (list[key]["class"]) {
-        let classes = list[key]["class"];
+      if (key["class"]) {
+        let classes = key["class"];
         for (let userClass of classes) {
-          console.log(userClass);
-          console.log(innerList);
-
           innerList.classList.add(userClass);
         }
       }
@@ -189,3 +194,45 @@ function createNestedListFromObject(list) {
 
 let nav = document.querySelector("nav");
 nav.addEventListener("click", dropDownFunction);
+
+class NavBar {
+  constructor() {
+    this.navList = [];
+  }
+
+  createOLForNav(list) {
+    let ul = document.createElement("ul");
+    for (let key of list) {
+      let li = document.createElement("li");
+      if (key["link"]) {
+        let a = document.createElement("a");
+        a.href = key["link"];
+        a.textContent = key.title;
+        if (key["target"]) {
+          a.target = key["target"];
+        }
+        li.appendChild(a);
+      } else {
+        li.textContent = key.title;
+      }
+      if (key["submenu"]) {
+        let innerList = createNestedListFromObject(key["submenu"]);
+        innerList.classList.add("drop-menu");
+        if (key["class"]) {
+          let classes = key["class"];
+          for (let userClass of classes) {
+            innerList.classList.add(userClass);
+          }
+        }
+        li.appendChild(innerList);
+      }
+
+      ul.appendChild(li);
+    }
+    return ul;
+  }
+
+  createNavItem(title) {
+    return { title };
+  }
+}
