@@ -1,0 +1,89 @@
+nav {
+    padding: 50px;
+    width: fit-content;
+}
+
+nav > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    border-radius: 5px;
+    display: flex;
+    justify-content: stretch;
+}
+
+nav ul li {
+    display: flex;
+    background: aquamarine;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 65px;
+    position: relative;
+    font-size: 14px;
+}
+
+nav ul li:hover {
+    background: aqua;
+}
+
+ul.drop-menu {
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    width: 100%;
+    padding: 0;
+    display: none;
+    flex-direction: column;
+    transform-origin:  bottom;
+}
+
+ul.drop-menu.sub-menu {
+    left: 100%;
+    top: 0%;
+}
+
+ul.drop-menu li {
+    background: aliceblue;
+    display: flex;
+}
+
+ul.drop-menu li:last-child {
+    border-radius: 0px 0px 5px 5px;
+}
+
+li:hover > ul.drop-menu, ul.drop-menu.active {
+    display: flex;
+    perspective: 1000px;
+}
+
+li:hover > ul.drop-menu > li, ul.drop-menu.active > li {
+    opacity: 0;
+    animation: menu1 300ms ease-in-out 0s forwards;
+}
+
+@keyframes menu1 {
+    0% {
+        opacity: 0;
+        transform: rotateY(90deg) translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: rotateY(0deg) translateX(0px);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    nav > ul {
+        flex-direction: column;
+        height: 150px;
+        width: 65px;
+    }
+
+    ul.drop-menu {
+        left: 100%;
+        top: 0%;
+    }
+}
