@@ -3,7 +3,7 @@ import "./styles/imageSlider.css";
 
 //Import JS files
 import NavBar from "./dropDownMenu";
-import ImageSlider from "./ImageSlider/imageSliderClass";
+import ImageSlider from "./ImageSlider/imageSlider";
 
 //import Images for Slider
 import highway from "./images/highway.jpeg";
@@ -92,3 +92,4 @@ for (let image of imageSrcList) {
 let imgSlider = new ImageSlider();
 imgSlider.addImageList(imageList);
 document.body.appendChild(imgSlider.renderImageSlider());
+// imgSlider.startAutomatic();
