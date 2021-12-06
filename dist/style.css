@@ -1,6 +1,20 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+}
 nav {
     padding: 50px;
     width: fit-content;
+    z-index: 10;
+}
+
+*, *::after, *::before{
+    box-sizing: border-box;
+    text-decoration: none;
 }
 
 nav > ul {
@@ -77,12 +91,15 @@ li:hover > ul.drop-menu > li, ul.drop-menu.active > li {
 @media screen and (max-width: 600px) {
     nav > ul {
         flex-direction: column;
-        height: 150px;
+        min-height: 150px;
         width: 65px;
     }
 
-    nav li {
-        width: auto;
+    nav li, .drop-menu li {
+        width: 100px;
+        height: 40px;
+        padding: 12px;
+        align-items: flex-start;
     }
 
     ul.drop-menu {

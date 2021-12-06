@@ -3,8 +3,9 @@ export default class NavBar {
     this.navList = [];
   }
 
-  createOLForNav() {
-    let list = this.navList;
+  createOLForNav(optionalList) {
+    let list = optionalList || this.navList;
+    if (list === []) return;
     let ul = document.createElement("ul");
     for (let key of list) {
       let li = document.createElement("li");
