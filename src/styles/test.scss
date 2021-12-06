@@ -1,0 +1,16 @@
+nav.mobileNav {
+    padding: 50px;
+    width: fit-content;
+    z-index: 10;
+    >ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        border-radius: 5px;
+        display: flex;
+    }
+    .menuTitle {
+        display: none;
+    }
+}

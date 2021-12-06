@@ -1,7 +1,8 @@
 //import CSS files
 import "./styles/imageSlider.css";
-import "./styles/MobileNav.css";
 import "./styles/dropDownMenu.css";
+import "./styles/MobileNav.css";
+import './styles/test.scss';
 
 //Import JS files
 import NavBar from "./dropDownMenu";
