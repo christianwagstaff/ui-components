@@ -68,27 +68,32 @@ export default class ImageSlider {
   startAutomatic() {
     setInterval(imageSliderControls.nextSlide, 5000);
   }
+
+  stopAutomatic() {
+    clearInterval(this.startAutomatic())
+  }
 }
 
 let imageSliderControls = (function () {
   let currentActiveIndex = 0;
+  let slideList = document.getElementsByClassName("imageFrame");
+  let dots = document.getElementsByClassName("roundButton");
 
   function changeSlide(n) {
     //To change Slide Based On SlideId Event
     if (n.target) {
       n = parseInt(n.target.dataset.slideId) || 0;
     }
-    let slides = document.querySelectorAll(".imageFrame");
-    let slideLength = slides.length;
-    let dots = document.querySelectorAll(".roundButton");
-    for (let slide of slides) {
+    // let slides = document.getElementsByClassName("imageFrame");
+    let slideLength = slideList.length;
+    for (let slide of slideList) {
       removeActive(slide);
     }
     for (let dot of dots) {
       removeActive(dot);
     }
     currentActiveIndex = n % slideLength;
-    slides[currentActiveIndex].classList.add("active");
+    slideList[currentActiveIndex].classList.add("active");
     dots[currentActiveIndex].classList.add("active");
   }
 

@@ -1,4 +1,5 @@
 import { eventDelegationCheck } from "./eventDelegation.js";
+import Tool from "./tools.js";
 
 export default class NavBar {
   constructor() {
@@ -11,22 +12,28 @@ export default class NavBar {
     let ul = document.createElement("ul");
     for (let key of list) {
       let li = document.createElement("li");
-      if (key["link"]) {
+      if (key.icon) {
+        console.log(key.icon);
+        li.appendChild(Tool.createIcon(key.icon));
+        li.classList.add("iconListItem");
+      }
+      if (key.link) {
         let a = document.createElement("a");
-        a.href = key["link"];
-        a.textContent = key.title;
-        if (key["target"]) {
-          a.target = key["target"];
+        a.href = key.link;
+        if (key.target) {
+          a.target = key.target;
         }
+        a.textContent = key.title;
+        a.classList.add("menuTitle");
         li.appendChild(a);
       } else {
-        li.textContent = key.title;
+        li.appendChild(Tool.createDomElement("div", "menuTitle", key.title));
       }
-      if (key["submenu"]) {
-        let innerList = this.createNestedListFromObject(key["submenu"]);
+      if (key.submenu) {
+        let innerList = this.createNestedListFromObject(key.submenu);
         innerList.classList.add("drop-menu");
-        if (key["class"]) {
-          let classes = key["class"];
+        if (key.class) {
+          let classes = key.class;
           for (let userClass of classes) {
             innerList.classList.add(userClass);
           }
@@ -43,22 +50,27 @@ export default class NavBar {
     let ul = document.createElement("ul");
     for (let key of list) {
       let li = document.createElement("li");
-      if (key["link"]) {
+      if (key.icon) {
+        console.log(key.icon);
+        li.appendChild(Tool.createIcon(key.icon));
+        li.classList.add("iconListItem");
+      }
+      if (key.link) {
         let a = document.createElement("a");
-        a.href = key["link"];
+        a.href = key.link;
         a.textContent = key.title;
-        if (key["target"]) {
-          a.target = key["target"];
+        if (key.target) {
+          a.target = key.target;
         }
         li.appendChild(a);
       } else {
         li.textContent = key.title;
       }
-      if (key["submenu"]) {
-        let innerList = this.createNestedListFromObject(key["submenu"]);
+      if (key.submenu) {
+        let innerList = this.createNestedListFromObject(key.submenu);
         innerList.classList.add("drop-menu");
-        if (key["class"]) {
-          let classes = key["class"];
+        if (key.class) {
+          let classes = key.class;
           for (let userClass of classes) {
             innerList.classList.add(userClass);
           }
