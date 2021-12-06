@@ -12,29 +12,6 @@ import sunbeam from "./images/sunbeam.jpeg";
 import treeRoad from "./images/tree-road.jpeg";
 import trees from "./images/trees.jpeg";
 
-function dropDownFunction(e) {
-  let parent = e.target.closest("li");
-  let dropDownContent = parent.querySelector(".drop-menu");
-  let currentActive = findCurrentActive();
-  if (currentActive && currentActive !== dropDownContent) {
-    removeActive(currentActive);
-  }
-  if (dropDownContent) {
-    dropDownContent.classList.toggle("active");
-  }
-}
-
-function findCurrentActive() {
-  let active = document.querySelector(".active");
-  if (active) {
-    return active;
-  }
-}
-
-function removeActive(active) {
-  active.classList.remove("active");
-}
-
 let navTemplate = [
   {
     title: "Haily",
@@ -76,8 +53,6 @@ let navTemplate = [
 const navItem = new NavBar();
 navItem.useTemplate(navTemplate);
 document.body.appendChild(navItem.renderNav());
-const nav = document.querySelector("nav");
-nav.addEventListener("click", dropDownFunction);
 
 //Images
 let imageSrcList = [autumn, highway, sunbeam, treeRoad, trees];

@@ -1,3 +1,5 @@
+import { eventDelegationCheck } from "./eventDelegation.js";
+
 export default class NavBar {
   constructor() {
     this.navList = [];
@@ -72,6 +74,7 @@ export default class NavBar {
   renderNav() {
     let nav = document.createElement("nav");
     nav.appendChild(this.createOLForNav());
+    nav.addEventListener("click", navControls.dropDownFunction);
     return nav;
   }
 
@@ -84,3 +87,35 @@ export default class NavBar {
     this.navList = template;
   }
 }
+
+let navControls = (function () {
+  function dropDownFunction(e) {
+    if (
+      eventDelegationCheck(e.target.firstChild.nextSibling, "ul", "drop-menu")
+    ) {
+      let parent = e.target.closest("li");
+      let nav = e.target.closest("nav");
+      let dropDownContent = parent.querySelector(".drop-menu");
+      let currentActive = findCurrentActive(nav);
+      if (currentActive && currentActive !== dropDownContent) {
+        removeActive(currentActive);
+      }
+      if (dropDownContent) {
+        dropDownContent.classList.toggle("active");
+      }
+    }
+  }
+  function findCurrentActive(nav) {
+    let active = nav.querySelector(".active");
+    if (active) {
+      return active;
+    }
+  }
+
+  function removeActive(active) {
+    active.classList.remove("active");
+  }
+  return {
+    dropDownFunction: dropDownFunction,
+  };
+})();
