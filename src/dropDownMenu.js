@@ -13,7 +13,6 @@ export default class NavBar {
     for (let key of list) {
       let li = document.createElement("li");
       if (key.icon) {
-        console.log(key.icon);
         li.appendChild(Tool.createIcon(key.icon));
         li.classList.add("iconListItem");
       }
